@@ -34,7 +34,14 @@ pub fn initialize_db() -> InitMsg {
                 println!("Error creating file: {}", e);
                 let files = glob("*").unwrap();
                 let res = files
-                    .map(|f| f.unwrap().file_name().unwrap().to_str().unwrap().to_string())
+                    .map(|f| {
+                        f.unwrap()
+                            .file_name()
+                            .unwrap()
+                            .to_str()
+                            .unwrap()
+                            .to_string()
+                    })
                     .collect::<Vec<String>>();
                 return InitMsg {
                     status: false,
