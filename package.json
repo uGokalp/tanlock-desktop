@@ -27,7 +27,7 @@
     "axios-tauri-api-adapter": "^0.2.0",
     "clsx": "^1.2.1",
     "flowbite": "^1.6.3",
-    "flowbite-react": "^0.3.8",
+    "flowbite-react": "^0.4.1",
     "immer": "^9.0.19",
     "jsonrepair": "^3.0.2",
     "kbar": "0.1.0-beta.40",
