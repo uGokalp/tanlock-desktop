@@ -54,6 +54,7 @@ specifiers:
   react-topbar-progress-indicator: ^4.1.1
   sass: ^1.58.0
   tailwindcss: ^3.2.4
+  tauri-plugin-sql-api: github:tauri-apps/tauri-plugin-sql
   typescript: ^4.9.5
   usehooks-ts: ^2.9.1
   zod: ^3.20.6
@@ -83,6 +84,7 @@ dependencies:
   react-hook-form: 7.43.1_react@18.2.0
   react-toastify: 9.1.1_biqbaboplfbrettd7655fr4n2y
   react-topbar-progress-indicator: 4.1.1_react@18.2.0
+  tauri-plugin-sql-api: github.com/tauri-apps/tauri-plugin-sql/b945c7a74ed207771420f7f0809d20ba66d55f70
   usehooks-ts: 2.9.1_biqbaboplfbrettd7655fr4n2y
   zod: 3.20.6
   zustand: 4.3.3_immer@9.0.19+react@18.2.0
@@ -4576,4 +4578,12 @@ packages:
       immer: 9.0.19
       react: 18.2.0
       use-sync-external-store: 1.2.0_react@18.2.0
+    dev: false
+
+  github.com/tauri-apps/tauri-plugin-sql/b945c7a74ed207771420f7f0809d20ba66d55f70:
+    resolution: {tarball: https://codeload.github.com/tauri-apps/tauri-plugin-sql/tar.gz/b945c7a74ed207771420f7f0809d20ba66d55f70}
+    name: tauri-plugin-sql-api
+    version: 0.0.0
+    dependencies:
+      '@tauri-apps/api': 1.2.0
     dev: false
