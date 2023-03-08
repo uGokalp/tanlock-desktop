@@ -39,6 +39,8 @@ specifiers:
   jsonrepair: ^3.0.2
   kbar: 0.1.0-beta.40
   lint-staged: ^13.1.0
+  localforage: ^1.10.0
+  lodash-es: ^4.17.21
   next: ^13.1.6
   nprogress: ^0.2.0
   postcss: ^8.4.21
@@ -56,6 +58,7 @@ specifiers:
   tailwindcss: ^3.2.4
   typescript: ^4.9.5
   usehooks-ts: ^2.9.1
+  uuid: ^9.0.0
   zod: ^3.20.6
   zustand: ^4.3.3
 
@@ -75,6 +78,8 @@ dependencies:
   immer: 9.0.19
   jsonrepair: 3.0.2
   kbar: 0.1.0-beta.40_biqbaboplfbrettd7655fr4n2y
+  localforage: 1.10.0
+  lodash-es: 4.17.21
   next: 13.1.6_5mhhrw5dq6gnbuirj2awdzvyuu
   nprogress: 0.2.0
   rado: 0.2.21
@@ -84,6 +89,7 @@ dependencies:
   react-toastify: 9.1.1_biqbaboplfbrettd7655fr4n2y
   react-topbar-progress-indicator: 4.1.1_react@18.2.0
   usehooks-ts: 2.9.1_biqbaboplfbrettd7655fr4n2y
+  uuid: 9.0.0
   zod: 3.20.6
   zustand: 4.3.3_immer@9.0.19+react@18.2.0
 
@@ -2511,6 +2517,10 @@ packages:
     engines: {node: '>= 4'}
     dev: true
 
+  /immediate/3.0.6:
+    resolution: {integrity: sha512-XXOFtyqDjNDAQxVfYxuF7g9Il/IbWmmlQg2MYKOH8ExIT1qg6xc4zyS3HaEEATgs1btfzxq15ciUiY7gjSXRGQ==}
+    dev: false
+
   /immer/9.0.19:
     resolution: {integrity: sha512-eY+Y0qcsB4TZKwgQzLaE/lqYMlKhv5J9dyd2RhhtGhNo2njPXDqU9XPfcNfa3MIDsdtZt5KlkIsirlo4dHsWdQ==}
     dev: false
@@ -2872,6 +2882,12 @@ packages:
       type-check: 0.4.0
     dev: true
 
+  /lie/3.1.1:
+    resolution: {integrity: sha512-RiNhHysUjhrDQntfYSfY4MU24coXXdEOgw9WGcKHNeEwffDYbF//u87M1EWaMGzuFoSbqW0C9C6lEEhDOAswfw==}
+    dependencies:
+      immediate: 3.0.6
+    dev: false
+
   /lilconfig/2.0.6:
     resolution: {integrity: sha512-9JROoBW7pobfsx+Sq2JsASvCo6Pfo6WWoUW79HuB1BCoBXD4PLWJPqDF6fNj67pqBYTbAHkE57M1kS/+L1neOg==}
     engines: {node: '>=10'}
@@ -2918,12 +2934,22 @@ packages:
       wrap-ansi: 7.0.0
     dev: true
 
+  /localforage/1.10.0:
+    resolution: {integrity: sha512-14/H1aX7hzBBmmh7sGPd+AOMkkIrHM3Z1PAyGgZigA1H1p5O5ANnMyWzvpAETtG68/dC4pC0ncy3+PPGzXZHPg==}
+    dependencies:
+      lie: 3.1.1
+    dev: false
+
   /locate-path/6.0.0:
     resolution: {integrity: sha512-iPZK6eYjbxRu3uB4/WZ3EsEIMJFMqAoopl3R+zuq0UjcAm/MO6KCweDgPfP3elTztoKP3KtnVHxTn2NHBSDVUw==}
     engines: {node: '>=10'}
     dependencies:
       p-locate: 5.0.0
     dev: true
+
+  /lodash-es/4.17.21:
+    resolution: {integrity: sha512-mKnC+QJ9pWVzv+C4/U3rRsHapFfHvQFoFB92e52xeyGMcX6/OlIl78je1u8vePzYZSkkogMPJ2yjxxsb89cxyw==}
+    dev: false
 
   /lodash.memoize/4.1.2:
     resolution: {integrity: sha512-t7j+NzmgnQzTAYXcsHYLgimltOV1MXHtlOWf6GjL9Kj8GK5FInw5JotxvbOs+IvV1/Dzo04/fCGfLVs7aXb4Ag==}
@@ -4468,6 +4494,11 @@ packages:
 
   /util-deprecate/1.0.2:
     resolution: {integrity: sha512-EPD5q1uXyFxJpCrLnCc1nHnq3gOa6DZBocAIiI2TaSCA7VCJ1UJDMagCzIkXNsUYfD1daK//LTEQ8xiIbrHtcw==}
+
+  /uuid/9.0.0:
+    resolution: {integrity: sha512-MXcSTerfPa4uqyzStbRoTgt5XIe3x5+42+q1sDuy3R5MDk66URdLMOZe5aPX/SQd+kuYAh0FdP/pO28IkQyTeg==}
+    hasBin: true
+    dev: false
 
   /which-boxed-primitive/1.0.2:
     resolution: {integrity: sha512-bwZdv0AKLpplFY2KZRX6TvyuN7ojjr7lwkg6ml0roIy9YeuSr7JS372qlNW18UQYzgYK9ziGcerWqZOmEn9VNg==}

@@ -1,20 +1,20 @@
 import { useMutation, useQuery } from "@tanstack/react-query"
 
-import DeviceRepository from "@/config/db/deviceRepository"
+import deviceStore from "@/config/db/device-store"
 import { Device, DeviceGroup } from "@/config/db/types"
 import { queryClient } from "@/config/queryClient"
 
 export const useDeviceGroups = () => {
   return useQuery({
     queryKey: ["db-device-groups"],
-    queryFn: () => DeviceRepository.listDeviceGroups(),
+    queryFn: () => deviceStore.listDeviceGroups(),
   })
 }
 
 export const useDevicesInGroups = () => {
   return useQuery({
     queryKey: ["db-devices-in-groups"],
-    queryFn: () => DeviceRepository.listDevicesInGroups(),
+    queryFn: () => deviceStore.listDevicesInGroups(),
   })
 }
 
@@ -27,7 +27,7 @@ type UpdateParams = {
 export const useUpdateDevicesToGroups = () => {
   return useMutation({
     mutationFn: ({ group_id, devices }: UpdateParams) =>
-      DeviceRepository.updateDevicesToGroupId(group_id, devices),
+      deviceStore.updateDevicesToGroupId(group_id, devices),
     onSuccess: (value, variables) => {
       void queryClient.invalidateQueries(["db-devices-in-groups"])
       void queryClient.invalidateQueries(["db-device-groups", variables.group_id])
@@ -39,7 +39,7 @@ export const useUpdateDevicesToGroups = () => {
 export const useInsertDeviceGroup = () => {
   return useMutation({
     mutationFn: (deviceGroup: DeviceGroup) =>
-      DeviceRepository.createDeviceGroup(deviceGroup),
+      deviceStore.createDeviceGroup(deviceGroup),
     onSuccess: () => {
       void queryClient.invalidateQueries(["db-device-groups"])
     },
@@ -50,7 +50,7 @@ export const useInsertDeviceGroup = () => {
 export const useDeviceGroupsById = (id: number | undefined) => {
   return useQuery({
     queryKey: ["db-device-groups", id],
-    queryFn: () => DeviceRepository.getDevicesByGroupId(id as number),
+    queryFn: () => deviceStore.getDevicesByGroupId(id as number),
     enabled: Boolean(id),
   })
 }

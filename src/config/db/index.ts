@@ -1,4 +1,4 @@
-import Repository from "@/config/db/repository"
+import deviceStore from "@/config/db/device-store"
 import {
   DeviceListSchema,
   User,
@@ -6,6 +6,7 @@ import {
   UserGroupListSchema,
   UserListSchema,
 } from "@/config/db/types"
+import userStore from "@/config/db/user-store"
 import { DeviceInfo, deviceInfotoDevice } from "@/types/types"
 
 // turn above into zod
@@ -13,7 +14,7 @@ import { DeviceInfo, deviceInfotoDevice } from "@/types/types"
 class Db {
   async getUsers() {
     try {
-      const users = await Repository.selectUsers()
+      const users = await userStore.selectUsers()
       return UserListSchema.parse(users)
     } catch (err) {
       console.error(err)
@@ -23,7 +24,7 @@ class Db {
 
   async getUserGroups() {
     try {
-      const userGroups = await Repository.listUserGroups()
+      const userGroups = await userStore.listUserGroups()
       return UserGroupListSchema.parse(userGroups)
     } catch (err) {
       console.error(err)
@@ -33,17 +34,17 @@ class Db {
 
   async getDevices() {
     try {
-      const users = await Repository.selectDevices()
-      return DeviceListSchema.parse(users)
+      const devices = await deviceStore.selectDevices()
+      return DeviceListSchema.parse(devices)
     } catch (err) {
       console.error(err)
-      throw new Error("Error getting users")
+      throw new Error("Error getting devices")
     }
   }
 
   async insertUser(user: User) {
     try {
-      const out = await Repository.createUser(user)
+      const out = await userStore.createUser(user)
       return out
     } catch (err) {
       console.error(err)
@@ -53,7 +54,11 @@ class Db {
 
   async insertUsers(users: User[]) {
     try {
-      const out = await Promise.all(users.map((user) => Repository.createUser(user)))
+      const out = []
+      for (const user of users) {
+        const res = await userStore.createUser(user)
+        out.push(res)
+      }
       return out
     } catch (err) {
       console.error(err)
@@ -63,7 +68,7 @@ class Db {
 
   async insertUserGroup(userGroup: UserGroup) {
     try {
-      const out = await Repository.createUserGroup(userGroup)
+      const out = await userStore.createUserGroup(userGroup)
       return out
     } catch (err) {
       console.error(err)
@@ -73,9 +78,11 @@ class Db {
 
   async insertDevices(devices: DeviceInfo[]) {
     try {
-      const out = await Promise.all(
-        devices.map((device) => Repository.createDevices(deviceInfotoDevice(device))),
-      )
+      const out = []
+      for (const device of devices) {
+        const res = await deviceStore.createDevices(deviceInfotoDevice(device))
+        out.push(res)
+      }
       return out
     } catch (err) {
       console.error(err)

@@ -1,6 +1,7 @@
 import { Statement } from "rado/index"
 
 import { invoke, resourcePath } from "@/utils/tauri"
+import localforage from "localforage"
 
 type Result = {
   result: string

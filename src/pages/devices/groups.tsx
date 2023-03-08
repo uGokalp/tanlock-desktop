@@ -59,7 +59,11 @@ const DeviceGroups = () => {
             <Tab.Panel className="pt-5">
               <div className="pb-5">
                 {deviceGroups && deviceGroups.length ? (
-                  <DeviceGroupSelect options={deviceGroups} setOption={setSelected} />
+                  <DeviceGroupSelect
+                    options={deviceGroups}
+                    setOption={setSelected}
+                    key="device-select"
+                  />
                 ) : null}
               </div>
               {devices && devicesInGroup ? (
