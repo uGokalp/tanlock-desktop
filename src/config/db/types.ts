@@ -54,6 +54,13 @@ const UserWithGroupsSchema = UserSchema.extend({
 const DeviceWithGroupsSchema = DeviceSchema.extend({
   GroupSchema,
 })
+const GroupXref = z.object({
+  id: z.number(),
+  group_id: z.number(),
+})
+
+const UserGroupXref = GroupXref.extend({ user_id: z.number() })
+const DeviceGroupXref = GroupXref.extend({ device_id: z.number() })
 
 export const UserListSchema = z.array(UserSchema)
 export const DeviceListSchema = z.array(DeviceSchema)
@@ -67,3 +74,6 @@ export type UserWithGroups = z.infer<typeof UserWithGroupsSchema>
 export type Device = z.infer<typeof DeviceSchema>
 export type DeviceGroup = z.infer<typeof GroupSchema>
 export type DeviceWithGroups = z.infer<typeof DeviceWithGroupsSchema>
+
+export type DeviceGroupXref = z.infer<typeof DeviceGroupXref>
+export type UserGroupXref = z.infer<typeof UserGroupXref>

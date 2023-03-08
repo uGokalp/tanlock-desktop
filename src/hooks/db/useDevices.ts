@@ -1,4 +1,5 @@
 import { useMutation, useQuery } from "@tanstack/react-query"
+import { toast } from "react-toastify"
 
 import db from "@/config/db"
 import { queryClient } from "@/config/queryClient"
@@ -12,8 +13,9 @@ export const useDevices = () => {
 export const useInsertDevices = () => {
   return useMutation({
     mutationFn: (devices: DeviceInfo[]) => db.insertDevices(devices),
-    onSuccess: () => {
+    onSuccess: (_, variables) => {
       void queryClient.invalidateQueries(["db-devices"])
+      toast.success(`${variables.length} devices inserted.`)
     },
   })
 }

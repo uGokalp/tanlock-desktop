@@ -1,4 +1,4 @@
-import { Query } from "rado/index"
+import { QueryData } from "rado/index"
 import { SqliteFormatter } from "rado/sqlite"
 
 type Param = {
@@ -7,7 +7,7 @@ type Param = {
 }
 
 interface Model {
-  toJSON: () => Query
+  toJSON: () => QueryData
 }
 
 /* 
