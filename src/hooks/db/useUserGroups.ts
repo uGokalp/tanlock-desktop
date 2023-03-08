@@ -1,8 +1,8 @@
 import { useMutation, useQuery } from "@tanstack/react-query"
 
 import db from "@/config/db"
-import Repository from "@/config/db/repository"
 import { User, UserGroup } from "@/config/db/types"
+import userStore from "@/config/db/user-store"
 import { queryClient } from "@/config/queryClient"
 
 export const useUserGroups = () => {
@@ -12,7 +12,7 @@ export const useUserGroups = () => {
 export const useUsersInGroups = () => {
   return useQuery({
     queryKey: ["db-users-in-groups"],
-    queryFn: () => Repository.listUsersInGroups(),
+    queryFn: () => userStore.listUsersInGroups(),
   })
 }
 
@@ -25,7 +25,7 @@ type UpdateParams = {
 export const useUpdateUsersToGroups = () => {
   return useMutation({
     mutationFn: ({ group_id, users }: UpdateParams) =>
-      Repository.updateUsersToGroupId(group_id, users),
+      userStore.updateUsersToGroupId(group_id, users),
     onSuccess: (value, variables) => {
       void queryClient.invalidateQueries(["db-users-in-groups"])
       void queryClient.invalidateQueries(["db-user-groups", variables.group_id])
@@ -50,7 +50,7 @@ export const useUserGroupsById = (
 ) => {
   return useQuery(
     ["db-user-groups", id],
-    async () => await Repository.getUsersByGroupId(id as number),
+    async () => await userStore.getUsersByGroupId(id as number),
     { enabled: Boolean(id), onSuccess },
   )
 }

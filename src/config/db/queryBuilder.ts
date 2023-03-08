@@ -7,7 +7,7 @@ type Param = {
 }
 
 interface Model {
-  toJSON: () => Query
+  toJSON: () => unknown
 }
 
 /* 
@@ -17,7 +17,7 @@ interface Model {
 const queryBuilder = (model: Model) => {
   const formatter = new SqliteFormatter()
   // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-  const statement = formatter.compile(model.toJSON())
+  const statement = formatter.compile(model.toJSON() as Query)
   const params = statement.paramData.map((p) => (p as Param).value)
   return { statement, params }
 }
