@@ -1,9 +1,9 @@
 import { useMutation, useQuery } from "@tanstack/react-query"
 
-import db from "@/config/db"
-import { User, UserGroup } from "@/config/db/types"
-import userStore from "@/config/db/user-store"
 import { queryClient } from "@/config/queryClient"
+import db from "@/db"
+import { User, UserGroup } from "@/db/types"
+import userStore from "@/db/user-store"
 
 export const useUserGroups = () => {
   return useQuery({ queryKey: ["db-user-groups"], queryFn: () => db.getUserGroups() })

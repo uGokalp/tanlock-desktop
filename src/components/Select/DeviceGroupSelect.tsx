@@ -2,15 +2,20 @@ import { Listbox, Transition } from "@headlessui/react"
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid"
 import { Fragment, useEffect, useState } from "react"
 
-import { DeviceGroup } from "@/config/db/types"
+import { DeviceGroup } from "@/db/types"
 import { classNames } from "@/utils"
 
 type SelectProps = {
   options: DeviceGroup[]
   setOption: (option: DeviceGroup) => void
+  label?: string
 }
 
-export default function Select({ options, setOption }: SelectProps) {
+export default function Select({
+  options,
+  setOption,
+  label = "Assigned to",
+}: SelectProps) {
   const [selected, setSelected] = useState<DeviceGroup | null>(null)
 
   useEffect(() => {
@@ -24,7 +29,7 @@ export default function Select({ options, setOption }: SelectProps) {
       {({ open }) => (
         <>
           <Listbox.Label className="block text-sm font-medium text-gray-700">
-            Assigned to
+            {label}
           </Listbox.Label>
           <div className="relative mt-1">
             <Listbox.Button

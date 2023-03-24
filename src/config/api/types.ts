@@ -1,6 +1,6 @@
 import { z } from "zod"
 
-import { User } from "@/config/db/types"
+import { User } from "@/db/types"
 import { UserSchema } from "@/types/types"
 
 export interface DeviceLogs {
@@ -9,6 +9,7 @@ export interface DeviceLogs {
     ts: number
     info: number[] | boolean[] | string[]
     name: string
+    sqn: number
   }[]
   total: number
   pagesize: number
@@ -42,6 +43,7 @@ export type ApiError = z.infer<typeof ApiErrorSchema>
 
 export const UserTransform = {
   toApi: (user: User): UserSchema => ({
+    uid: 0,
     login: user.login,
     cname: user.cname,
     employee: user.employee,

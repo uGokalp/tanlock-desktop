@@ -2,7 +2,7 @@ import { ArrowSmallRightIcon } from "@heroicons/react/20/solid"
 import { useState } from "react"
 import { toast } from "react-toastify"
 
-import { Device } from "@/config/db/types"
+import { Device } from "@/db/types"
 import { useUpdateDevicesToGroups } from "@/hooks/db/useDeviceGroups"
 import { isEqual } from "@/utils"
 

@@ -2,7 +2,7 @@ import { Listbox, Transition } from "@headlessui/react"
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid"
 import { Fragment, useEffect, useState } from "react"
 
-import { UserGroup } from "@/config/db/types"
+import { UserGroup } from "@/db/types"
 import { classNames } from "@/utils"
 
 type SelectProps = {

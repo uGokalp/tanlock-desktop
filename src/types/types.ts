@@ -1,4 +1,4 @@
-import { Device } from "@/config/db/types"
+import { Device } from "@/db/types"
 
 export type DeviceInfo = {
   device: {
@@ -48,9 +48,10 @@ export type DeviceInfo = {
 }
 
 export interface UserSchema {
+  uid: number
   login: string
   cname: string
-  employee: string
+  employee: number
   active: boolean
   fourEye: boolean
 }

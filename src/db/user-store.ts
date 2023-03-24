@@ -1,9 +1,8 @@
 import localforage from "localforage"
 import { omitBy } from "lodash-es"
 
-import { User, UserGroup, UserGroupXref, UserWithGroups } from "@/config/db/types"
-
-const uuid = () => Date.now() + Math.random()
+import { User, UserGroup, UserGroupXref, UserWithGroups } from "@/db/types"
+import { uuid } from "@/db/utils"
 
 class UserStore {
   async selectUsers() {
@@ -17,15 +16,29 @@ class UserStore {
 
   async createUser(record: Omit<User, "id">) {
     const users = await this.selectUsers()
-    const newUsers = [...users, { ...record, id: uuid() }]
+    const newUsers = [...users, { ...record, id: uuid(users) }]
     const res = await localforage.setItem("user", newUsers)
     return Boolean(res)
   }
 
   async createUsers(record: Omit<User, "id">) {
     const users = await this.selectUsers()
-    const newUsers = [...users, { ...record, id: uuid() }]
+    const newUsers = [...users, { ...record, id: uuid(users) }]
     const res = await localforage.setItem("user", newUsers)
+    return Boolean(res)
+  }
+
+  async deleteUsers(ids: number[]) {
+    const users = await this.selectUsers()
+    const newUsers = users.filter((user) => !ids.includes(user.id))
+    const res = await localforage.setItem("user", newUsers)
+    const userGroupXref = await localforage.getItem<UserGroupXref[]>("userGroupXref")
+    if (userGroupXref) {
+      const newUserGroupXref = userGroupXref.filter(
+        (xref) => !ids.includes(xref.user_id),
+      )
+      await localforage.setItem("userGroupXref", newUserGroupXref)
+    }
     return Boolean(res)
   }
 
@@ -40,7 +53,10 @@ class UserStore {
 
   async createUserGroup(record: UserGroup): Promise<boolean> {
     const userGroups = await this.listUserGroups()
-    await localforage.setItem("userGroups", [...userGroups, { ...record, id: uuid() }])
+    await localforage.setItem("userGroups", [
+      ...userGroups,
+      { ...record, id: uuid(userGroups) },
+    ])
     return true
   }
 
@@ -70,7 +86,7 @@ class UserStore {
     const newUserGroupXrefs = ids.map((id) => ({
       group_id,
       user_id: id,
-      id: uuid(),
+      id: uuid(users),
     }))
     const newUserGroupXref = [...userGroupXref, ...newUserGroupXrefs]
     await localforage.setItem("userGroupXref", newUserGroupXref)
@@ -101,6 +117,23 @@ class UserStore {
     const users = await localforage.getItem<User[]>("user")
     if (!userGroupXref || !userGroups || !users) return []
     return []
+  }
+
+  // Todo: refactor to crud model
+  async deleteUserGroups(ids: number[]): Promise<boolean> {
+    const userGroups = await localforage.getItem<UserGroup[]>("userGroups")
+    if (!userGroups) return false
+    const userGroupXref = await localforage.getItem<UserGroupXref[]>("userGroupXref")
+
+    if (userGroupXref) {
+      const newUserGroupXref = userGroupXref.filter(
+        (xref) => !ids.includes(xref.group_id),
+      )
+      await localforage.setItem("userGroupXref", newUserGroupXref)
+    }
+    const newUserGroups = userGroups.filter((group) => !ids.includes(group.id))
+    await localforage.setItem("userGroups", newUserGroups)
+    return true
   }
 }
 

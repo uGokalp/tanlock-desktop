@@ -1,5 +1,7 @@
 import { z } from "zod"
 
+import { MediumCreateSchema } from "@/config/api/types"
+
 export const DeviceSchema = z.object({
   id: z.number(),
   device__name: z.string(),
@@ -34,11 +36,11 @@ export const DeviceSchema = z.object({
   sensor__motor: z.coerce.boolean(),
 })
 
-const UserSchema = z.object({
+export const UserSchema = z.object({
   id: z.number(),
   login: z.string(),
   cname: z.string(),
-  employee: z.string(),
+  employee: z.coerce.number(),
   active: z.coerce.boolean(),
   four_eye: z.coerce.boolean(),
 })
@@ -66,6 +68,7 @@ export const UserListSchema = z.array(UserSchema)
 export const DeviceListSchema = z.array(DeviceSchema)
 export const UserGroupListSchema = z.array(GroupSchema)
 export const DeviceGroupListSchema = z.array(GroupSchema)
+export const MediumSchema = MediumCreateSchema.extend({ id: z.number() })
 
 export type User = z.infer<typeof UserSchema>
 export type UserGroup = z.infer<typeof GroupSchema>
@@ -77,3 +80,12 @@ export type DeviceWithGroups = z.infer<typeof DeviceWithGroupsSchema>
 
 export type DeviceGroupXref = z.infer<typeof DeviceGroupXref>
 export type UserGroupXref = z.infer<typeof UserGroupXref>
+export type MediumListSchema = z.infer<typeof MediumListSchema>
+
+export const MediumListSchema = z.array(MediumSchema)
+export type Medium = z.infer<typeof MediumSchema>
+export type DeviceBaseData = {
+  name: Device["device__name"]
+  location: Device["device__location"]
+  contact: Device["device__contact"]
+}

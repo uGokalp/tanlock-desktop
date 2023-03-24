@@ -1,7 +1,9 @@
 import { createColumnHelper } from "@tanstack/react-table"
 
-import BaseTable from "@/components/BaseTable"
-import { User } from "@/config/db/types"
+import CheckboxTable from "@/components/Table/CheckboxTable"
+import { User } from "@/db/types"
+import { useDeleteUsers } from "@/hooks/db/useUsers"
+import { useRouter } from "next/router"
 
 type UserListTableProps = {
   data: User[]
@@ -9,17 +11,21 @@ type UserListTableProps = {
 const columnHelper = createColumnHelper<User>()
 
 const columns = [
+  columnHelper.accessor("id", {
+    cell: (info) => info.getValue(),
+    header: () => <span>Id</span>,
+  }),
   columnHelper.accessor("login", {
     cell: (info) => info.getValue(),
     header: () => <span>Login</span>,
   }),
   columnHelper.accessor("cname", {
     cell: (info) => info.getValue(),
-    header: () => <span>Cname</span>,
+    header: () => <span>Common Name</span>,
   }),
   columnHelper.accessor("employee", {
     cell: (info) => info.getValue(),
-    header: () => <span>Employee</span>,
+    header: () => <span>Employee Number</span>,
   }),
   columnHelper.accessor("active", {
     cell: (info) => info.getValue().toString(),
@@ -32,9 +38,20 @@ const columns = [
 ]
 
 const UserListTable: React.FC<UserListTableProps> = ({ data }) => {
+  const deleteUsers = useDeleteUsers()
+  const router = useRouter()
+  const onEdit = (id: number) => {
+    void router.push(`/users/${id}`)
+  }
   return (
     <div className="py-3">
-      <BaseTable data={data} columns={columns} />
+      <CheckboxTable
+        data={data}
+        columns={columns}
+        onDelete={deleteUsers.mutate}
+        header="Users"
+        onEdit={onEdit}
+      />
     </div>
   )
 }

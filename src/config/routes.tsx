@@ -1,5 +1,6 @@
 import {
   ArrowPathIcon,
+  BuildingLibraryIcon,
   DeviceTabletIcon,
   DocumentMagnifyingGlassIcon,
   DocumentTextIcon,
@@ -22,13 +23,6 @@ export const routes = [
     children: [],
     fullName: "Scan for devices",
     icon: DocumentMagnifyingGlassIcon,
-  },
-  {
-    sidebarName: "Sync",
-    path: "/sync",
-    children: [],
-    fullName: "Sync devices",
-    icon: ArrowPathIcon,
   },
   {
     sidebarName: "Users",
@@ -84,7 +78,19 @@ export const routes = [
         path: "/credentials/enroll",
         children: [],
       },
+      {
+        sidebarName: "List",
+        path: "/credentials/list",
+        children: [],
+      },
     ],
+  },
+  {
+    sidebarName: "Sync",
+    path: "/sync",
+    children: [],
+    fullName: "Sync devices",
+    icon: ArrowPathIcon,
   },
   {
     sidebarName: "Config Editor",
@@ -101,6 +107,12 @@ export const routes = [
     sidebarName: "Logs",
     path: "/logs",
     icon: DocumentTextIcon,
+    children: [],
+  },
+  {
+    sidebarName: "Admin",
+    path: "/admin",
+    icon: BuildingLibraryIcon,
     children: [],
   },
 ]

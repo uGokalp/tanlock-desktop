@@ -3,6 +3,7 @@ lockfileVersion: 5.4
 specifiers:
   '@headlessui/react': ^1.7.11
   '@heroicons/react': ^2.0.16
+  '@hookform/resolvers': ^2.9.11
   '@prettier/plugin-xml': ^2.2.0
   '@tailwindcss/forms': ^0.5.3
   '@tanstack/react-query': ^4.24.6
@@ -60,12 +61,13 @@ specifiers:
   typescript: ^4.9.5
   usehooks-ts: ^2.9.1
   uuid: ^9.0.0
-  zod: ^3.20.6
+  zod: ^3.21.4
   zustand: ^4.3.3
 
 dependencies:
   '@headlessui/react': 1.7.11_biqbaboplfbrettd7655fr4n2y
   '@heroicons/react': 2.0.16_react@18.2.0
+  '@hookform/resolvers': 2.9.11_react-hook-form@7.43.1
   '@tailwindcss/forms': 0.5.3_tailwindcss@3.2.4
   '@tanstack/react-query': 4.24.6_biqbaboplfbrettd7655fr4n2y
   '@tanstack/react-query-devtools': 4.24.6_r32zdxeb7iubg3qfkymfterewe
@@ -91,7 +93,7 @@ dependencies:
   react-topbar-progress-indicator: 4.1.1_react@18.2.0
   usehooks-ts: 2.9.1_biqbaboplfbrettd7655fr4n2y
   uuid: 9.0.0
-  zod: 3.20.6
+  zod: 3.21.4
   zustand: 4.3.3_immer@9.0.19+react@18.2.0
 
 devDependencies:
@@ -232,6 +234,14 @@ packages:
       react: '>= 16'
     dependencies:
       react: 18.2.0
+    dev: false
+
+  /@hookform/resolvers/2.9.11_react-hook-form@7.43.1:
+    resolution: {integrity: sha512-bA3aZ79UgcHj7tFV7RlgThzwSSHZgvfbt2wprldRkYBcMopdMvHyO17Wwp/twcJasNFischFfS7oz8Katz8DdQ==}
+    peerDependencies:
+      react-hook-form: ^7.0.0
+    dependencies:
+      react-hook-form: 7.43.1_react@18.2.0
     dev: false
 
   /@humanwhocodes/config-array/0.11.8:
@@ -4600,8 +4610,8 @@ packages:
     engines: {node: '>=10'}
     dev: true
 
-  /zod/3.20.6:
-    resolution: {integrity: sha512-oyu0m54SGCtzh6EClBVqDDlAYRz4jrVtKwQ7ZnsEmMI9HnzuZFj8QFwAY1M5uniIYACdGvv0PBWPF2kO0aNofA==}
+  /zod/3.21.4:
+    resolution: {integrity: sha512-m46AKbrzKVzOzs/DZgVnG5H55N1sv1M8qZU3A8RIKbs3mrACDNeIOeilDymVb2HdmP8uwshOCF4uJ8uM9rCqJw==}
     dev: false
 
   /zustand/4.3.3_immer@9.0.19+react@18.2.0:

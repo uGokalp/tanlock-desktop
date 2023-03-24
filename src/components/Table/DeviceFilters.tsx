@@ -3,7 +3,7 @@ import { XMarkIcon } from "@heroicons/react/24/outline"
 import { Dispatch, Fragment, SetStateAction } from "react"
 
 import { allColumns } from "@/components/Table/DeviceListTable"
-import { DeviceSchema } from "@/config/db/types"
+import { DeviceSchema } from "@/db/types"
 
 const keys = DeviceSchema.keyof()
 

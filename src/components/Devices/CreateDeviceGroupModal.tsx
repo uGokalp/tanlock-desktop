@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form"
 import { toast } from "react-toastify"
 
 import SpinnerButton from "@/components/Button/SpinnerButton"
-import { DeviceGroup } from "@/config/db/types"
+import { DeviceGroup } from "@/db/types"
 import { useInsertDeviceGroup } from "@/hooks/db/useDeviceGroups"
 import { onPromise } from "@/utils"
 
@@ -23,6 +23,7 @@ function CreateDeviceGroupModal({ isOpen, setIsOpen }: ModalProps) {
       reset()
       e?.preventDefault()
       setCreatedGroup(data.name)
+      setIsOpen(false)
     })
   })
   return (

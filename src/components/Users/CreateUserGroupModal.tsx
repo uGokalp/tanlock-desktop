@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form"
 import { toast } from "react-toastify"
 
 import SpinnerButton from "@/components/Button/SpinnerButton"
-import { UserGroup } from "@/config/db/types"
+import { UserGroup } from "@/db/types"
 import { useInsertUserGroup } from "@/hooks/db/useUserGroups"
 import { onPromise } from "@/utils"
 
@@ -23,6 +23,7 @@ function CreateUserGroupModal({ isOpen, setIsOpen }: ModalProps) {
       reset()
       e?.preventDefault()
       setCreatedGroup(data.name)
+      setIsOpen(false)
     })
   })
   return (

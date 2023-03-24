@@ -1,7 +1,7 @@
 import { createColumnHelper } from "@tanstack/react-table"
 
 import BaseTable from "@/components/BaseTable"
-import SpinnerButton from "@/components/Button/SpinnerButton"
+import LoadingButton from "@/components/Button/LoadingButton"
 import { useInsertDevices } from "@/hooks/db/useDevices"
 import { DeviceInfo } from "@/types/types"
 
@@ -53,9 +53,9 @@ const DeviceScanTable: React.FC<DeviceScanTableProps> = ({ data }) => {
     <div className="py-3">
       <BaseTable data={devices} columns={columns} />
       <div className="float-right pt-2">
-        <SpinnerButton isLoading={isLoading} onClick={onClick}>
+        <LoadingButton isLoading={isLoading} onClick={onClick}>
           Add to database
-        </SpinnerButton>
+        </LoadingButton>
       </div>
     </div>
   )

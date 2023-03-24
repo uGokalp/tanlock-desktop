@@ -8,16 +8,16 @@ const FORM_STATE = {
       dirty: false,
       value: {
         deviceIp: "192.168.1",
-        userCname: "",
+        user: {
+          cname: "",
+          login: "",
+        },
       },
     },
     listen: {
       valid: false,
       dirty: false,
-      value: {
-        receiveEmails: false,
-        receiveNotifications: false,
-      },
+      value: {},
     },
   },
 }

@@ -5,6 +5,7 @@ import { toast } from "react-toastify"
 import api from "@/config/api/api"
 import { MediumCreate } from "@/config/api/types"
 import { queryClient } from "@/config/queryClient"
+import db from "@/db"
 import { UserSchema } from "@/types/types"
 
 export const useTanlockUsers = (ip: string) => {
@@ -59,8 +60,17 @@ type AssignGroupParams = {
 
 export const useAssignGroup = () => {
   return useMutation(
-    ({ ips, users }: AssignGroupParams) => {
-      return api.assignGroup(ips, users)
+    async ({ ips, users }: AssignGroupParams) => {
+      await api.deleteAllMediums(ips)
+      await api.deleteAllUsers(ips)
+      await api.assignGroup(ips, users)
+      const mediums = await db.listMediums()
+      const logins = users.map((u) => u.login)
+      const matchingMediums = mediums.filter((medium) => logins.includes(medium.login))
+      if (matchingMediums.length) {
+        await api.assignMediums(ips, matchingMediums)
+      }
+      return true
     },
     {
       onSuccess: (_d, variables) => {

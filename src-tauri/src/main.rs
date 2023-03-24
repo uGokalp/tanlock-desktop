@@ -15,20 +15,9 @@ fn on_button_clicked() -> String {
     format!("on_button_clicked called from Rust! (timestamp: {since_the_epoch}ms)")
 }
 
-mod handler;
-
-extern crate dotenv;
-use dotenv::dotenv;
-
 fn main() {
-    dotenv().ok();
     tauri::Builder::default()
-        .plugin(tauri_plugin_sqlite::init())
-        .invoke_handler(tauri::generate_handler![
-            on_button_clicked,
-            handler::does_db_exist,
-            handler::initialize_db
-        ])
+        .invoke_handler(tauri::generate_handler![on_button_clicked])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

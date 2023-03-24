@@ -3,12 +3,13 @@ import { omitBy } from "lodash-es"
 
 import {
   Device,
+  DeviceBaseData,
   DeviceGroup,
   DeviceGroupXref,
   DeviceWithGroups,
-} from "@/config/db/types"
-
-const uuid = () => Date.now() + Math.random()
+  Medium,
+} from "@/db/types"
+import { uuid } from "@/db/utils"
 
 class DeviceStore {
   async selectDevices() {
@@ -22,8 +23,24 @@ class DeviceStore {
 
   async createDevices(record: Omit<Device, "id">) {
     const devices = await this.selectDevices()
-    const newDevices = [...devices, { ...record, id: uuid() }]
+    const newDevices = [...devices, { ...record, id: uuid(devices) }]
     const res = await localforage.setItem("device", newDevices)
+    return Boolean(res)
+  }
+
+  async deleteDevices(ids: number[]) {
+    const devices = await this.selectDevices()
+    const newDevices = devices.filter((user) => !ids.includes(user.id))
+    const res = await localforage.setItem("device", newDevices)
+    const deviceGroupXref = await localforage.getItem<DeviceGroupXref[]>(
+      "deviceGroupXref",
+    )
+    if (deviceGroupXref) {
+      const newDeviceGroupXref = deviceGroupXref.filter(
+        (xref) => !ids.includes(xref.device_id),
+      )
+      await localforage.setItem("deviceGroupXref", newDeviceGroupXref)
+    }
     return Boolean(res)
   }
 
@@ -40,7 +57,7 @@ class DeviceStore {
     const deviceGroups = await this.listDeviceGroups()
     await localforage.setItem("deviceGroups", [
       ...deviceGroups,
-      { ...record, id: uuid() },
+      { ...record, id: uuid(deviceGroups) },
     ])
     return true
   }
@@ -71,7 +88,7 @@ class DeviceStore {
     const newDeviceGroupXrefs = ids.map((id) => ({
       group_id,
       device_id: id,
-      id: uuid(),
+      id: uuid(devices),
     }))
     const newDeviceGroupXref = [...deviceGroupXref, ...newDeviceGroupXrefs]
     await localforage.setItem("deviceGroupXref", newDeviceGroupXref)
@@ -108,6 +125,65 @@ class DeviceStore {
     const devices = await localforage.getItem<Device[]>("device")
     if (!deviceGroupXref || !deviceGroups || !devices) return []
     return []
+  }
+
+  async listMediums(): Promise<Medium[]> {
+    const mediums = await localforage.getItem<Medium[]>("mediums")
+    if (mediums) {
+      return mediums
+    }
+    await localforage.setItem("mediums", [])
+    return []
+  }
+
+  async createMedium(record: Omit<Medium, "id">) {
+    const mediums = await this.listMediums()
+    const newDevices = [...mediums, { ...record, id: uuid(mediums) }]
+    const res = await localforage.setItem("mediums", newDevices)
+    return Boolean(res)
+  }
+
+  async deleteMediums(ids: number[]) {
+    const mediums = await this.listMediums()
+    const newMediums = mediums.filter((user) => !ids.includes(user.id))
+    const res = await localforage.setItem("mediums", newMediums)
+    return Boolean(res)
+  }
+
+  // Todo: change this to use api
+  async updateBasedata(ip: string, basedata: DeviceBaseData) {
+    const devices = await this.selectDevices()
+    const newDevices = devices.map((device) => {
+      if (device.network__ip === ip) {
+        return {
+          ...device,
+          device__name: basedata.name,
+          device__location: basedata.location,
+          device__contact: basedata.contact,
+        }
+      }
+      return device
+    })
+    const res = await localforage.setItem("device", newDevices)
+    return Boolean(res)
+  }
+
+  // Todo: refactor to crud model
+  async deleteDeviceGroups(ids: number[]): Promise<boolean> {
+    const deviceGroups = await localforage.getItem<DeviceGroup[]>("deviceGroups")
+    if (!deviceGroups) return false
+    const deviceGroupXref = await localforage.getItem<DeviceGroupXref[]>(
+      "deviceGroupXref",
+    )
+    if (deviceGroupXref) {
+      const newDeviceGroupXref = deviceGroupXref.filter(
+        (xref) => !ids.includes(xref.group_id),
+      )
+      await localforage.setItem("deviceGroupXref", newDeviceGroupXref)
+    }
+    const newDeviceGroups = deviceGroups.filter((group) => !ids.includes(group.id))
+    await localforage.setItem("deviceGroups", newDeviceGroups)
+    return true
   }
 }
 

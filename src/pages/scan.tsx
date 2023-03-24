@@ -1,7 +1,7 @@
 import { useQueryClient } from "@tanstack/react-query"
 import { useForm } from "react-hook-form"
 
-import SpinnerButton from "@/components/Button/SpinnerButton"
+import LoadingButton from "@/components/Button/LoadingButton"
 import DeviceScanTable from "@/components/Table/DeviceScanTable"
 import { useScan } from "@/hooks/tauri/useScan"
 import Sidebar from "@/layouts/Sidebar"
@@ -58,15 +58,16 @@ const Scan = () => {
             {...register("rangeEnd")}
           />
         </div>
-        <SpinnerButton
+        <LoadingButton
           isLoading={isLoading}
           type="submit"
           className="block w-full rounded-lg bg-blue-700 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
         >
           Scan
-        </SpinnerButton>
+        </LoadingButton>
       </form>
       <div id="break" className="pb-10"></div>
+
       {scanData && <DeviceScanTable data={scanData} />}
     </Sidebar>
   )

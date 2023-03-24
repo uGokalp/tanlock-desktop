@@ -1,12 +1,14 @@
-import deviceStore from "@/config/db/device-store"
+import deviceStore from "@/db/device-store"
 import {
   DeviceListSchema,
+  Medium,
+  MediumListSchema,
   User,
   UserGroup,
   UserGroupListSchema,
   UserListSchema,
-} from "@/config/db/types"
-import userStore from "@/config/db/user-store"
+} from "@/db/types"
+import userStore from "@/db/user-store"
 import { DeviceInfo, deviceInfotoDevice } from "@/types/types"
 
 // turn above into zod
@@ -25,6 +27,7 @@ class Db {
   async getUserGroups() {
     try {
       const userGroups = await userStore.listUserGroups()
+      console.log(userGroups)
       return UserGroupListSchema.parse(userGroups)
     } catch (err) {
       console.error(err)
@@ -89,53 +92,24 @@ class Db {
       throw new Error("Error inserting users")
     }
   }
+  async listMediums() {
+    try {
+      const mediums = await deviceStore.listMediums()
+      return MediumListSchema.parse(mediums)
+    } catch (err) {
+      console.error(err)
+      throw new Error("Error listing mediums")
+    }
+  }
+  async insertMedium(medium: Omit<Medium, "id">) {
+    try {
+      const res = await deviceStore.createMedium(medium)
+      return res
+    } catch (err) {
+      console.error(err)
+      throw new Error("Error inserting mediums")
+    }
+  }
 }
 const db = new Db()
 export default db
-
-export type DeviceInfo2 = {
-  device: {
-    name: string
-    contact: string
-    location: string
-    serialno: string
-  }
-  network: {
-    macaddr: string
-    ip: string
-    netmask: string
-    dns: string
-    gateway: string
-  }
-  relais: {
-    r1: boolean
-    r0: boolean
-  }
-  time: {
-    time: string
-    offset: string
-    invalid: boolean
-    stamp: number
-  }
-  version: {
-    filesystem: string
-    hwdesc: string
-    software: string
-    flavor: string
-    hash: string
-    branch: string
-    firmware: string
-    build: string
-    date: string
-    hardware: string
-  }
-  external: {
-    s2: boolean
-    s1: boolean
-  }
-  sensor: {
-    lock: boolean
-    handle: boolean
-    motor: boolean
-  }
-}

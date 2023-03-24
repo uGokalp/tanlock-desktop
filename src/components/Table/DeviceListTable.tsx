@@ -2,9 +2,11 @@ import { FunnelIcon } from "@heroicons/react/20/solid"
 import { createColumnHelper } from "@tanstack/react-table"
 import { useState } from "react"
 
-import BaseTable from "@/components/BaseTable"
+import CheckboxTable from "@/components/Table/CheckboxTable"
 import DeviceFilters from "@/components/Table/DeviceFilters"
-import { Device, DeviceSchema } from "@/config/db/types"
+import { Device, DeviceSchema } from "@/db/types"
+import { useDeleteDevices } from "@/hooks/db/useDevices"
+import { useRouter } from "next/router"
 
 const keyToName = (key: string) => {
   return key
@@ -29,10 +31,16 @@ export const allColumns = keys.options.map((key) => {
 const DeviceListTable: React.FC<DeviceListTableProps> = ({ data }) => {
   const [filtersIsOpen, setFiltersIsOpen] = useState<boolean>(false)
   const [columns, setColumns] = useState<typeof allColumns>(allColumns)
+  const deleteDevices = useDeleteDevices()
   //Dispatch<SetStateAction<ColumnDef
+  const router = useRouter()
+  const onEdit = (id: number) => {
+    void router.push(`/devices/${id}`)
+  }
+
   return (
-    <div>
-      <div className="flex justify-end py-3">
+    <div className="py-3">
+      {/* <div className="flex justify-end py-3">
         <button
           onClick={() => setFiltersIsOpen(!filtersIsOpen)}
           type="button"
@@ -52,10 +60,15 @@ const DeviceListTable: React.FC<DeviceListTableProps> = ({ data }) => {
           columnKeys={keys}
           setColumns={setColumns}
         />
-      </div>
-      <div className="py-3">
-        <BaseTable data={data} columns={columns} />
-      </div>
+      </div> */}
+
+      <CheckboxTable
+        data={data}
+        columns={columns}
+        header="Devices"
+        onDelete={deleteDevices.mutate}
+        onEdit={onEdit}
+      />
     </div>
   )
 }

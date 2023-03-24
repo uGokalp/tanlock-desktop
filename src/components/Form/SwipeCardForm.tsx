@@ -1,10 +1,13 @@
 import { FormEvent, useEffect, useState } from "react"
 
+import LoadingButton from "@/components/Button/LoadingButton"
 import BasicTimer from "@/components/Countdown/Basic"
 import { useFormContext } from "@/components/Form/FormContext"
 import BasicCard from "@/components/PhysicalCard/BasicCard"
 import { MediumCreateSchema } from "@/config/api/types"
+import { useInsertMedium } from "@/hooks/db/useMediums"
 import { useCreateMedium } from "@/hooks/outbound"
+import { useCardSwipe } from "@/hooks/tauri/useCardSwipe"
 import { getTimestamp } from "@/utils"
 
 function SwipeCardForm(
@@ -15,25 +18,25 @@ function SwipeCardForm(
 ) {
   const { form } = useFormContext()
   const [countdown, setCountdown] = useState(false)
-  const [cardLoaded, setCardLoaded] = useState(true)
+  const [cardLoaded, setCardLoaded] = useState(false)
   const [countdownExpired, setCountdownExpired] = useState(false)
 
   const [ts, setTs] = useState<number>(() => getTimestamp())
   const createMedium = useCreateMedium()
+  const insertMedium = useInsertMedium()
 
-  // const { data: cardData } = useCardSwipe(
-  //   form.steps.setup.value.deviceIp,
-  //   ts,
-  //   3000,
-  //   countdown,
-  //   cardLoaded || countdownExpired,
-  // )
-  const cardData = "e9549ef90a7c05"
+  const { data: cardData, isPreviousData } = useCardSwipe(
+    form.steps.setup.value.deviceIp,
+    ts,
+    3000,
+    countdown,
+    cardLoaded || countdownExpired,
+  )
   useEffect(() => {
-    if (cardData) {
+    if (!isPreviousData && cardData) {
       setCardLoaded(true)
     }
-  }, [cardData])
+  }, [cardData, isPreviousData])
 
   const ProcessButton = () => (
     <div className="flex justify-center pt-5">
@@ -64,25 +67,14 @@ function SwipeCardForm(
 
   const onSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    console.log("before parse")
     const medium = MediumCreateSchema.parse({
-      login: form.steps.setup.value.userCname,
+      login: form.steps.setup.value.user.login,
       identifier: cardData,
     })
-    console.log("Medium is", medium)
-    createMedium
-      .mutateAsync({
-        ip: form.steps.setup.value.deviceIp,
-        medium,
-      })
-      .then((res) => {
-        console.log(res)
-        props.onNext()
-      })
-      .catch((err) => {
-        console.error(err)
-        props.onPrev()
-      })
+    insertMedium
+      .mutateAsync(medium)
+      .then(() => props.onNext())
+      .catch((e) => console.error(e))
   }
 
   return (
@@ -97,7 +89,7 @@ function SwipeCardForm(
         {cardData && cardLoaded ? (
           <div className="flex items-center justify-center">
             <BasicCard
-              cname={form.steps.setup.value.userCname}
+              cname={form.steps.setup.value.user.cname}
               cardIdentifier={cardData}
             />
           </div>
@@ -112,12 +104,14 @@ function SwipeCardForm(
             >
               Back
             </button>
-            <button
+            <LoadingButton
+              isLoading={createMedium.isLoading}
+              disabled={!cardData || !cardLoaded}
               type="submit"
-              className="ml-3 inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+              className="ml-3 justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
             >
               Next
-            </button>
+            </LoadingButton>
           </div>
         </div>
       </div>

@@ -2,7 +2,7 @@ import { ArrowSmallRightIcon } from "@heroicons/react/20/solid"
 import { useState } from "react"
 import { toast } from "react-toastify"
 
-import { User } from "@/config/db/types"
+import { User } from "@/db/types"
 import { useUpdateUsersToGroups } from "@/hooks/db/useUserGroups"
 import { isEqual } from "@/utils"
 

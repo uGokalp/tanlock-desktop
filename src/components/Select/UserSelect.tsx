@@ -4,20 +4,22 @@ import { Fragment } from "react"
 import { Control, Controller } from "react-hook-form"
 
 import { FormData } from "@/components/Form/SetupForm"
+import { User } from "@/db/types"
 import { classNames } from "@/utils"
 
 type SelectProps = {
-  options: string[]
+  options: User[]
   control: Control<FormData, any>
 }
 
 export default function UserSelect({ options, control }: SelectProps) {
   return (
     <Controller
-      name="userCname"
+      name="user"
+      rules={{ required: true }}
       control={control}
       render={({ field }) => (
-        <Listbox value={field.value} onChange={field.onChange}>
+        <Listbox defaultValue="" value={field.value} onChange={field.onChange}>
           {({ open }) => (
             <>
               <Listbox.Label className="block text-sm font-medium text-gray-900">
@@ -30,7 +32,11 @@ export default function UserSelect({ options, control }: SelectProps) {
                     field.value ? "py-3" : "py-5",
                   )}
                 >
-                  <span className="block truncate">{field.value}</span>
+                  <span className="block truncate">
+                    {field.value
+                      ? `${field.value.login} - ${field.value.cname}`
+                      : undefined}
+                  </span>
                   <span className="pointer-events-none absolute top-3  right-0 pr-2">
                     <ChevronUpDownIcon
                       className="h-5 w-5 text-gray-400"
@@ -49,7 +55,7 @@ export default function UserSelect({ options, control }: SelectProps) {
                   <Listbox.Options className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
                     {options.map((option, i) => (
                       <Listbox.Option
-                        key={`${option}-${i}`}
+                        key={`${option.login}-${i}`}
                         className={({ active }) =>
                           classNames(
                             active ? "bg-indigo-600 text-white" : "text-gray-900",
@@ -66,7 +72,7 @@ export default function UserSelect({ options, control }: SelectProps) {
                                 "block truncate",
                               )}
                             >
-                              {option}
+                              {option.login} - {option.cname}
                             </span>
 
                             {selected ? (

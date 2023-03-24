@@ -17,16 +17,7 @@ tauri-build = { version = "1.2.1", features = [] }
 [dependencies]
 serde_json = "1.0"
 serde = { version = "1.0", features = ["derive"] }
-tauri = { version = "1.2.4", features = ["fs-all", "http-all", "notification-all", "os-all", "path-all"] }
-dotenv = "0.10"
-sqlite = "0.26.0"
-glob = "0.3.1"
-# diesel = { version = "2.0.0", features = ["sqlite"] }
-# dotenvy = "0.15"
-
-[dependencies.tauri-plugin-sqlite]
-git = "https://github.com/lzdyes/tauri-plugin-sqlite"
-tag = "v0.1.1"
+tauri = { version = "1.2.4", features = ["http-all"] }
 
 [features]
 # by default Tauri runs in production mode
