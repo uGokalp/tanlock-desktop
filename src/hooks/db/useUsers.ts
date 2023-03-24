@@ -1,9 +1,9 @@
 import { useMutation, useQuery } from "@tanstack/react-query"
 
+import { queryClient } from "@/config/queryClient"
 import db from "@/db"
 import { User, UserListSchema } from "@/db/types"
 import userStore from "@/db/user-store"
-import { queryClient } from "@/config/queryClient"
 
 export const useUsers = () => {
   return useQuery({ queryKey: ["db-users"], queryFn: () => db.getUsers() })

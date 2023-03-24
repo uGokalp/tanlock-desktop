@@ -1,9 +1,9 @@
 import { createColumnHelper } from "@tanstack/react-table"
+import { useRouter } from "next/router"
 
 import CheckboxTable from "@/components/Table/CheckboxTable"
 import { User } from "@/db/types"
 import { useDeleteUsers } from "@/hooks/db/useUsers"
-import { useRouter } from "next/router"
 
 type UserListTableProps = {
   data: User[]

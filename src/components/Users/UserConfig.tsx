@@ -3,12 +3,12 @@ import { BuildingOfficeIcon, UserIcon } from "@heroicons/react/20/solid"
 import { useRouter } from "next/router"
 import { useState } from "react"
 
+import EmptyState from "@/components/EmptyState"
 import UserConfigAC from "@/components/Users/UserConfigAC"
 import UserConfigProfile from "@/components/Users/UserConfigProfile"
 import { useMediums } from "@/hooks/db/useMediums"
 import { useUser } from "@/hooks/db/useUsers"
 import { classNames } from "@/utils"
-import EmptyState from "@/components/EmptyState"
 
 type UserConfigProps = {
   userId: number

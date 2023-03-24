@@ -1,12 +1,12 @@
 import { FunnelIcon } from "@heroicons/react/20/solid"
 import { createColumnHelper } from "@tanstack/react-table"
+import { useRouter } from "next/router"
 import { useState } from "react"
 
 import CheckboxTable from "@/components/Table/CheckboxTable"
 import DeviceFilters from "@/components/Table/DeviceFilters"
 import { Device, DeviceSchema } from "@/db/types"
 import { useDeleteDevices } from "@/hooks/db/useDevices"
-import { useRouter } from "next/router"
 
 const keyToName = (key: string) => {
   return key

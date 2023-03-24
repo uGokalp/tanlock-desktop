@@ -14,7 +14,7 @@
     "build:darwin": "tauri build --target x86_64-apple-darwin",
     "build:universal": "tauri build --target universal-apple-darwin",
     "dev": "tauri dev",
-    "lint": "next lint",
+    "lint": "next lint --fix",
     "prepare": "husky install"
   },
   "dependencies": {

@@ -1,8 +1,8 @@
 import { useMutation, useQuery } from "@tanstack/react-query"
 
+import { queryClient } from "@/config/queryClient"
 import deviceStore from "@/db/device-store"
 import { Device, DeviceGroup } from "@/db/types"
-import { queryClient } from "@/config/queryClient"
 
 export const useDeviceGroups = () => {
   return useQuery({
