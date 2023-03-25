@@ -8,7 +8,8 @@
   },
   "scripts": {
     "next-start": "cross-env BROWSER=none next dev",
-    "next-build": "next build && next export",
+    "next-build": "prettier --write src/**/* && next lint --fix && next build && next export",
+    "format": "prettier --write src/**/*",
     "tauri": "tauri",
     "build": "tauri build",
     "build:darwin": "tauri build --target x86_64-apple-darwin",
