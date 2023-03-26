@@ -1,6 +1,6 @@
 # Tanlock Configuration Management (TCM)
 
-This applications talks to talks to Tanlock devices through their web apis.
+This applications talks to talks to Tanlock devices through their web APIs.
 
 # Features
 - Creating `users` and `user groups`
