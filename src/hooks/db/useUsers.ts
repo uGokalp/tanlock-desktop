@@ -15,8 +15,11 @@ export const useUser = (id: number) => {
     query?.reset()
     return
   }
-  const data = UserListSchema.parse(query.state.data)
-  return data.find((user: User) => user.id === id)
+  const res = UserListSchema.safeParse(query.state.data)
+  if (!res.success) {
+    return
+  }
+  return res.data.find((user: User) => user.id === id)
 }
 
 export const useInsertUsers = () => {

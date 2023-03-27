@@ -25,6 +25,6 @@ Check release page for
   - Windows users need Microsoft Visual Studio C++ Build Tools to build the application
   - Mac users need xcode build tools
 
-3. Run pnmp install to install frontend packages
+3. Run pnpm install to install frontend packages
 4. Run pnpm run dev for development build
 5. Run pnpm build for production build

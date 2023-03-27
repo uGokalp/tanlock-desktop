@@ -17,8 +17,11 @@ export const useDevice = (id: number) => {
     query?.reset()
     return
   }
-  const data = DeviceListSchema.parse(query.state.data)
-  return data.find((user: Device) => user.id === id)
+  const res = DeviceListSchema.safeParse(query.state.data)
+  if (!res.success) {
+    return
+  }
+  return res.data.find((user: Device) => user.id === id)
 }
 
 // Uses device info because result is coming from api req
