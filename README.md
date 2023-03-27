@@ -11,9 +11,9 @@ This applications talks to talks to Tanlock devices through their web apis.
 
 # Installing
 Check release page for
-- Windows msi
-- Macos dmg
-- Linux 
+- Windows
+- Macos
+- Linux
 
 # Development
 - Frontend Next.js (Typescript) is in src
