@@ -1,10 +1,12 @@
+import { useQueryClient } from "@tanstack/react-query"
 import { FormEvent, useEffect, useState } from "react"
+import { useUnmount } from "react-use"
 
 import LoadingButton from "@/components/Button/LoadingButton"
 import BasicTimer from "@/components/Countdown/Basic"
-import { useFormContext } from "@/components/Form/FormContext"
 import BasicCard from "@/components/PhysicalCard/BasicCard"
 import { MediumCreateSchema } from "@/config/api/types"
+import { User } from "@/db/types"
 import { useInsertMedium } from "@/hooks/db/useMediums"
 import { useCreateMedium } from "@/hooks/outbound"
 import { useCardSwipe } from "@/hooks/tauri/useCardSwipe"
@@ -14,9 +16,16 @@ function SwipeCardForm(
   props: React.PropsWithChildren<{
     onNext: () => void
     onPrev: () => void
+    deviceIp: string
+    user: User
   }>,
 ) {
-  const { form } = useFormContext()
+  const queryClient = useQueryClient()
+  useUnmount(() => {
+    console.log("Invalidating swipe query")
+    queryClient.removeQueries({ queryKey: ["card-swipe"] })
+  })
+
   const [countdown, setCountdown] = useState(false)
   const [cardLoaded, setCardLoaded] = useState(false)
   const [countdownExpired, setCountdownExpired] = useState(false)
@@ -26,7 +35,7 @@ function SwipeCardForm(
   const insertMedium = useInsertMedium()
 
   const { data: cardData, isPreviousData } = useCardSwipe(
-    form.steps.setup.value.deviceIp,
+    props.deviceIp,
     ts,
     3000,
     countdown,
@@ -68,7 +77,7 @@ function SwipeCardForm(
   const onSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     const medium = MediumCreateSchema.parse({
-      login: form.steps.setup.value.user.login,
+      login: props.user.login,
       identifier: cardData,
     })
     insertMedium
@@ -88,10 +97,7 @@ function SwipeCardForm(
         {countdown && !cardLoaded ? <Timer /> : null}
         {cardData && cardLoaded ? (
           <div className="flex items-center justify-center">
-            <BasicCard
-              cname={form.steps.setup.value.user.cname}
-              cardIdentifier={cardData}
-            />
+            <BasicCard cname={props.user.cname} cardIdentifier={cardData} />
           </div>
         ) : null}
 

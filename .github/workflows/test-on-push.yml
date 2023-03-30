@@ -1,5 +1,9 @@
-name: 'test-on-pr'
-on: [pull_request]
+name: "test-on-push"
+on:
+  push:
+    branches:
+      - main
+      - "releases/**"
 
 jobs:
   test-tauri:
@@ -28,7 +32,7 @@ jobs:
           version: 6.0.2
       - name: Install dependencies
         run: pnpm install
-      - uses: tauri-apps/tauri-action@v0
+      - uses: tauri-apps/tauri-action@v0.3
         with:
           tauriScript: pnpm
         env:

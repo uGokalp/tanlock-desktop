@@ -2,7 +2,6 @@ import { Disclosure } from "@headlessui/react"
 import Image from "next/image"
 import Link from "next/link"
 import { useRouter } from "next/router"
-import { useState } from "react"
 
 import Header from "@/components/Header"
 import { routes } from "@/config/routes"
@@ -13,9 +12,9 @@ type SidebarProps = {
 }
 
 export default function Sidebar({ children }: SidebarProps) {
-  const [sidebarOpen, setSidebarOpen] = useState(false)
   const router = useRouter()
   const currentRoute = router.pathname
+  const currentRouteParent = `/${currentRoute.split("/")[1]}`
 
   return (
     <>
@@ -69,7 +68,12 @@ export default function Sidebar({ children }: SidebarProps) {
                       </Link>
                     </div>
                   ) : (
-                    <Disclosure as="div" key={route.path} className="space-y-1">
+                    <Disclosure
+                      as="div"
+                      key={route.path}
+                      className="space-y-1"
+                      defaultOpen={route.path === currentRouteParent}
+                    >
                       {({ open }) => (
                         <>
                           <Disclosure.Button
@@ -106,7 +110,12 @@ export default function Sidebar({ children }: SidebarProps) {
                               >
                                 <Disclosure.Button
                                   as={"a"}
-                                  className="routes-center group flex w-full rounded-md py-2 pl-11 pr-2 text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+                                  className={classNames(
+                                    subRoute.path === currentRoute
+                                      ? "bg-gray-100 text-gray-900"
+                                      : "bg-white text-gray-600 hover:bg-gray-50 hover:text-gray-900",
+                                    "routes-center group flex w-full rounded-md py-2 pl-11 pr-2 text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-900",
+                                  )}
                                 >
                                   {subRoute.sidebarName}
                                 </Disclosure.Button>

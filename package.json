@@ -1,6 +1,6 @@
 {
-  "name": "tauri-nextjs-template",
-  "version": "0.2.2",
+  "name": "tcm",
+  "version": "0.2.3",
   "private": true,
   "author": {
     "name": "Umur Gokalp",
@@ -45,6 +45,7 @@
     "react-hook-form": "^7.43.1",
     "react-toastify": "^9.1.1",
     "react-topbar-progress-indicator": "^4.1.1",
+    "react-use": "^17.4.0",
     "usehooks-ts": "^2.9.1",
     "uuid": "^9.0.0",
     "zod": "^3.21.4",

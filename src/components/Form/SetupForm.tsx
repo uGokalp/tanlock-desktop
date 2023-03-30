@@ -1,12 +1,9 @@
 import { zodResolver } from "@hookform/resolvers/zod"
-import produce from "immer"
-import { useEffect } from "react"
-import { useForm, useFormState } from "react-hook-form"
+import { useForm } from "react-hook-form"
 import { z } from "zod"
 
-import { useFormContext } from "@/components/Form/FormContext"
 import UserSelect from "@/components/Select/UserSelect"
-import { UserSchema } from "@/db/types"
+import { User, UserSchema } from "@/db/types"
 import { useUsers } from "@/hooks/db/useUsers"
 import { onPromise } from "@/utils"
 
@@ -19,58 +16,27 @@ export type FormData = z.infer<typeof formSchema>
 function SetupForm(
   props: React.PropsWithChildren<{
     onNext: () => void
+    setState: (deviceIp: string, user: User) => void
+    state: { deviceIp?: string; user?: User }
   }>,
 ) {
   const { data: users } = useUsers()
-  const { form, setForm } = useFormContext()
-
   const { register, handleSubmit, control, reset } = useForm<FormData>({
     resolver: zodResolver(formSchema),
     shouldUseNativeValidation: true,
     defaultValues: {
-      deviceIp: form.steps.setup.value.deviceIp,
+      deviceIp: props.state.deviceIp,
+      user: props.state.user,
     },
   })
 
-  const { isDirty } = useFormState({
-    control,
-  })
-
   const deviceIpControl = register("deviceIp", { required: true })
-
-  useEffect(() => {
-    setForm(
-      produce((form) => {
-        form.steps.setup.dirty = isDirty
-      }),
-    )
-  }, [isDirty, setForm])
-
-  // const userCname = watch("userCname")
-
-  // useEffect(() => {
-  //   if (userCname && users) {
-  //     const user = users.find((user) => user.cname === userCname)
-  //     if (user) {
-  //       setValue("userLogin", user.login)
-  //     }
-  //   }
-  // }, [setValue, userCname, users])
 
   return (
     <form
       onSubmit={onPromise(
         handleSubmit((value) => {
-          setForm(
-            produce((formState) => {
-              formState.steps.setup = {
-                value,
-                valid: true,
-                dirty: false,
-              }
-            }),
-          )
-
+          props.setState(value.deviceIp, value.user)
           props.onNext()
         }),
       )}

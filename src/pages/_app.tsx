@@ -13,7 +13,6 @@ import TopBarProgress from "react-topbar-progress-indicator"
 
 import { queryClient } from "@/config/queryClient"
 import useProgress from "@/hooks/useProgress"
-import CommandPalette from "@/providers/CommandPalette"
 
 TopBarProgress.config({
   barColors: {
@@ -36,10 +35,8 @@ function MyApp({ Component, pageProps, router }: AppProps) {
   return (
     <QueryClientProvider client={queryClient}>
       <ToastContainer />
-      <CommandPalette>
-        <FetchingBar />
-        <Component {...pageProps} />
-      </CommandPalette>
+      <FetchingBar />
+      <Component {...pageProps} />
       <ReactQueryDevtools />
     </QueryClientProvider>
   )

@@ -1,6 +1,9 @@
-name: 'publish'
-
-on: pull_request
+name: "publish"
+on:
+  push:
+    branches:
+      - main
+      - "releases/**"
 
 jobs:
   create-release:
