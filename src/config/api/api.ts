@@ -12,6 +12,7 @@ import { DeviceBaseData } from "@/db/types"
 import { ScanFormData } from "@/pages/scan"
 import { DeviceInfo, UserSchema } from "@/types/types"
 import { cartesian, isEmpty, range } from "@/utils"
+import { invoke, isFulfilled } from "@/utils/tauri"
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 
@@ -25,13 +26,20 @@ class Api extends BaseApi {
     const ipRanges = range(parseInt(rangeStart, 10), parseInt(rangeEnd, 10)).map(
       (ip) => `${ipAdress}.${ip}`,
     )
-    const toFetch = []
-    for (const ipRange of ipRanges) {
-      toFetch.push(client.get<DeviceInfo>(`http://${ipRange}/rest/v1/info`))
-    }
-    const data = await Promise.all(toFetch)
+    const pings = (
+      await Promise.allSettled(ipRanges.map((ip) => invoke<boolean>("ping", { ip })))
+    ).map((p) => p.status === "fulfilled" && p.value)
+    const availableIps = ipRanges.filter((_, i) => pings[i])
+    console.log(availableIps)
 
-    return data.map((d) => d.data)
+    const toFetch = []
+    for (const ip of availableIps) {
+      toFetch.push(client.get<DeviceInfo>(`http://${ip}/rest/v1/info`))
+    }
+    const data = (await Promise.allSettled(toFetch))
+      .filter(isFulfilled)
+      .map((d) => d.value.data)
+    return data
   }
 
   public basicAuthHeaders() {

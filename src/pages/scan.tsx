@@ -18,8 +18,8 @@ const Scan = () => {
   const { register, handleSubmit } = useForm<ScanFormData>({
     defaultValues: {
       ipAdress: "192.168.1",
-      rangeStart: "0",
-      rangeEnd: "0",
+      rangeStart: "90",
+      rangeEnd: "91",
     },
   })
   const { mutate: scanMutation, data: mutationData, isLoading } = useScan()

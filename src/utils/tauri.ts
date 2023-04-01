@@ -20,3 +20,9 @@ export async function invoke<T>(
 export const tauriDbExists = async () => {
   return await invoke<boolean>("does_db_exist")
 }
+
+export function isFulfilled<T>(
+  val: PromiseSettledResult<T>,
+): val is PromiseFulfilledResult<T> {
+  return val.status === "fulfilled"
+}

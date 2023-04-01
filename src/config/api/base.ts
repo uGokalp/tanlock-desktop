@@ -14,6 +14,7 @@ export class BaseApi {
     const _client = axios.create({
       adapter: axiosTauriApiAdapter.axiosTauriApiAdapter,
       headers: this.basicAuthHeaders(),
+      // timeout: 8000,
     })
     return _client
   }
