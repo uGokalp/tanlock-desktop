@@ -51,7 +51,7 @@ const GroupSchema = z.object({
 })
 
 const UserWithGroupsSchema = UserSchema.extend({
-  GroupSchema,
+  groups: GroupSchema,
 })
 const DeviceWithGroupsSchema = DeviceSchema.extend({
   GroupSchema,

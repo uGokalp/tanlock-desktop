@@ -1,9 +1,11 @@
 import { createColumnHelper } from "@tanstack/react-table"
 import { useRouter } from "next/router"
+import { toast } from "react-toastify"
 
 import CheckboxTable from "@/components/Table/CheckboxTable"
 import { User } from "@/db/types"
 import { useDeleteUsers } from "@/hooks/db/useUsers"
+import { exportUsers } from "@/utils/tauri"
 
 type UserListTableProps = {
   data: User[]
@@ -43,6 +45,14 @@ const UserListTable: React.FC<UserListTableProps> = ({ data }) => {
   const onEdit = (id: number) => {
     void router.push(`/users/${id}`)
   }
+  const onExport = (data: User[]) => {
+    exportUsers(data)
+      .then(() => toast.success("Users exported successfully!"))
+      .catch((e) => {
+        if (e instanceof Error) toast.error(e.message)
+        else toast.error("Error exporting users!")
+      })
+  }
   return (
     <div className="py-3">
       <CheckboxTable
@@ -51,6 +61,7 @@ const UserListTable: React.FC<UserListTableProps> = ({ data }) => {
         onDelete={deleteUsers.mutate}
         header="Users"
         onEdit={onEdit}
+        onExport={onExport}
       />
     </div>
   )

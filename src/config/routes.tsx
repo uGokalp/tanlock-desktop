@@ -113,6 +113,15 @@ export const routes = [
     sidebarName: "Admin",
     path: "/admin",
     icon: BuildingLibraryIcon,
-    children: [],
+    children: [
+      {
+        sidebarName: "Delete",
+        path: "/admin/delete",
+      },
+      {
+        sidebarName: "Import Export",
+        path: "/admin/import-export",
+      },
+    ],
   },
 ]

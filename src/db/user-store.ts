@@ -1,7 +1,7 @@
 import localforage from "localforage"
 import { omitBy } from "lodash-es"
 
-import { User, UserGroup, UserGroupXref, UserWithGroups } from "@/db/types"
+import { User, UserGroup, UserGroupXref } from "@/db/types"
 import { uuid } from "@/db/utils"
 
 class UserStore {
@@ -80,7 +80,7 @@ class UserStore {
   }
 
   async insertUsersToGroupId(group_id: number, users: User[]): Promise<boolean> {
-    const ids = users.map((User) => User.id)
+    const ids = users.map((user) => user.id)
     const userGroupXref =
       (await localforage.getItem<UserGroupXref[]>("userGroupXref")) || []
     const newUserGroupXrefs = ids.map((id) => ({
@@ -111,12 +111,18 @@ class UserStore {
     return await Promise.all(awaitable)
   }
 
-  async listUsersInGroups(): Promise<UserWithGroups[]> {
+  async listUsersInGroups(): Promise<User[]> {
     const userGroupXref = await localforage.getItem<UserGroupXref[]>("userGroupXref")
     const userGroups = await localforage.getItem<UserGroup[]>("userGroups")
     const users = await localforage.getItem<User[]>("user")
     if (!userGroupXref || !userGroups || !users) return []
-    return []
+
+    return users.filter((user) => {
+      const xref = userGroupXref.filter((xref) => xref.user_id === user.id)
+      const groupIds = xref.map((xref) => xref.group_id)
+      const groups = userGroups.filter((group) => groupIds.includes(group.id))
+      return groups.length > 0
+    })
   }
 
   // Todo: refactor to crud model

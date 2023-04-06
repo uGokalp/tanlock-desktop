@@ -1,8 +1,10 @@
 import { createColumnHelper } from "@tanstack/react-table"
+import { toast } from "react-toastify"
 
 import CheckboxTable from "@/components/Table/CheckboxTable"
 import { Medium } from "@/db/types"
 import { useDeleteMediums } from "@/hooks/db/useMediums"
+import { exportMediums } from "@/utils/tauri"
 
 type MediumListTableProps = {
   data: Medium[]
@@ -38,6 +40,14 @@ const columns = [
 
 const MediumListTable: React.FC<MediumListTableProps> = ({ data }) => {
   const deleteMediums = useDeleteMediums()
+  const onExport = (data: Medium[]) => {
+    exportMediums(data)
+      .then(() => toast.success("Mediums exported successfully!"))
+      .catch((e) => {
+        if (e instanceof Error) toast.error(e.message)
+        else toast.error("Error exporting mediums!")
+      })
+  }
   return (
     <div className="py-3">
       <CheckboxTable
@@ -45,6 +55,7 @@ const MediumListTable: React.FC<MediumListTableProps> = ({ data }) => {
         columns={columns}
         onDelete={deleteMediums.mutate}
         header={"Mediums"}
+        onExport={onExport}
       />
     </div>
   )

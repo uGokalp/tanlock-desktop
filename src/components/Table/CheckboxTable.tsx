@@ -1,3 +1,4 @@
+import { ArrowDownTrayIcon } from "@heroicons/react/20/solid"
 import {
   flexRender,
   getCoreRowModel,
@@ -6,6 +7,7 @@ import {
 } from "@tanstack/react-table"
 import { useLayoutEffect, useRef, useState } from "react"
 
+import IconButton from "@/components/Button/IconButton"
 import EmptyState from "@/components/EmptyState"
 import { classNames } from "@/utils"
 
@@ -17,6 +19,7 @@ type TableProps<T> = Omit<TableOptions<T>, "getCoreRowModel"> & {
   onDelete: (ids: number[]) => void
   header: string
   onEdit?: (id: number) => void
+  onExport?: (data: T[]) => void
 }
 
 export default function CheckboxTable<T extends IData>({
@@ -25,6 +28,7 @@ export default function CheckboxTable<T extends IData>({
   onDelete,
   header,
   onEdit,
+  onExport,
 }: TableProps<T>) {
   const checkbox = useRef<HTMLInputElement>(null)
   const [checked, setChecked] = useState(false)
@@ -57,20 +61,21 @@ export default function CheckboxTable<T extends IData>({
     onDelete((selectedRows as unknown as { id: number }[]).map((row) => row.id))
   }
 
+  const canEdit = Boolean(onEdit)
+
   return (
     <div className="px-6 lg:px-8">
       <div className="sm:flex sm:items-center">
         <div className="sm:flex-auto">
           <h1 className="text-xl font-semibold text-gray-900">{header}</h1>
         </div>
-        {/* <div className="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
-          <button
-            type="button"
-            className="block rounded-md bg-indigo-600 py-1.5 px-3 text-center text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-          >
-            Add user
-          </button>
-        </div> */}
+        {onExport && (
+          <div className="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
+            <IconButton Icon={ArrowDownTrayIcon} onClick={() => onExport(data)}>
+              Export
+            </IconButton>
+          </div>
+        )}
       </div>
       <div className="mt-8 flow-root">
         <div className="-my-2 -mx-6 overflow-x-auto lg:-mx-8">
@@ -128,7 +133,7 @@ export default function CheckboxTable<T extends IData>({
                 </thead>
                 <tbody className="divide-y divide-gray-200 bg-white">
                   {table.getRowModel().rows.map((row, idx) => (
-                    <tr key={row.id} className="">
+                    <tr key={row.id} className="hover:bg-gray-100">
                       <td className="relative w-16 px-8 sm:w-12 sm:px-6">
                         {selectedRows.includes(data[idx]) && (
                           <div className="absolute inset-y-0 left-0 w-0.5 bg-indigo-600" />
@@ -153,27 +158,13 @@ export default function CheckboxTable<T extends IData>({
                           className={classNames(
                             "whitespace-nowrap px-3 py-4 text-sm text-gray-500",
                             idx === 0 ? "max-w-[1rem]" : "",
+                            canEdit ? "hover:cursor-pointer" : "",
                           )}
+                          onClick={() => onEdit && onEdit(row.original.id)}
                         >
                           {flexRender(cell.column.columnDef.cell, cell.getContext())}
                         </td>
                       ))}
-                      <td className="whitespace-nowrap py-4 pl-3 pr-6 text-right text-sm font-medium sm:pr-3">
-                        {onEdit && (
-                          <a
-                            href="#"
-                            className="text-indigo-600 hover:text-indigo-900"
-                            aria-disabled
-                            onClick={() => {
-                              if (onEdit) {
-                                onEdit(data[idx].id)
-                              }
-                            }}
-                          >
-                            Edit<span className="sr-only">, {row.id}</span>
-                          </a>
-                        )}
-                      </td>
                     </tr>
                   ))}
                 </tbody>

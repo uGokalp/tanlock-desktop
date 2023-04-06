@@ -1,12 +1,12 @@
-import { FunnelIcon } from "@heroicons/react/20/solid"
 import { createColumnHelper } from "@tanstack/react-table"
 import { useRouter } from "next/router"
 import { useState } from "react"
+import { toast } from "react-toastify"
 
 import CheckboxTable from "@/components/Table/CheckboxTable"
-import DeviceFilters from "@/components/Table/DeviceFilters"
 import { Device, DeviceSchema } from "@/db/types"
 import { useDeleteDevices } from "@/hooks/db/useDevices"
+import { exportDevices } from "@/utils/tauri"
 
 const keyToName = (key: string) => {
   return key
@@ -36,6 +36,14 @@ const DeviceListTable: React.FC<DeviceListTableProps> = ({ data }) => {
   const router = useRouter()
   const onEdit = (id: number) => {
     void router.push(`/devices/${id}`)
+  }
+  const onExport = (data: Device[]) => {
+    exportDevices(data)
+      .then(() => toast.success("Devices exported successfully!"))
+      .catch((e) => {
+        if (e instanceof Error) toast.error(e.message)
+        else toast.error("Error exporting devices!")
+      })
   }
 
   return (
@@ -68,6 +76,7 @@ const DeviceListTable: React.FC<DeviceListTableProps> = ({ data }) => {
         header="Devices"
         onDelete={deleteDevices.mutate}
         onEdit={onEdit}
+        onExport={onExport}
       />
     </div>
   )
